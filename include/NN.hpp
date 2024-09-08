@@ -10,8 +10,14 @@ class NeuralNet{
     public:
         NeuralNet(std::vector<int> topology);
         void setInputs(std::vector<double> input);
-
         void NNprintToConcole();
+        void feedForward();
+
+        Matrix *getNeuronMatrix(int index){ return this->layers.at(index)->matrixifyVals(); }
+        Matrix *getActivatedNeuronMatrix(int index) { return this->layers.at(index)->matrixifyActivatedVals(); }
+        Matrix *getDerivedNeuronMatrix(int index) { return this->layers.at(index)->matrixifyDrivedVals(); }
+        Matrix *getWeightMatrix(int index) { return this->matrixWeights.at(index); }
+
 
     private:
         int topologySize;

@@ -1,4 +1,5 @@
-#include <NN.hpp>
+#include "NN.hpp"
+#include "utils/MatrixMultiply.hpp"
 
 NeuralNet::NeuralNet(std::vector<int> topology){
     this->topologySize= topology.size();
@@ -18,6 +19,27 @@ NeuralNet::NeuralNet(std::vector<int> topology){
     for (int i= 0; i < (topologySize - 1); i++){
         Matrix *m= new Matrix(topology.at(i), topology.at(i+1), true);
         this->matrixWeights.push_back(m);
+    }
+}
+
+void NeuralNet::feedForward(){
+    // loop from the input to the output excluding the output itself (hence the -1)
+    // the output will be the result, there is no operation to be done.
+    for(int i= 0; i < (this->layers.size() - 1); i++){
+        // input
+        Matrix *a= this->getNeuronMatrix(i);
+        // if the layer is not input, get the activated matrix
+        if(i != 0){
+            a= this->getActivatedNeuronMatrix(i);
+        }
+
+        Matrix *b= this->getWeightMatrix(i);
+        Matrix *c= (new utils::MatrixMultiply(a, b))->execut();
+
+        std::vector<double> vals;
+        for(int c_index= 0; c_index < c->getNumCols(); c_index++){
+            vals.push_back(c->get_val_matrix(0, c_index));
+        }
     }
 }
 
