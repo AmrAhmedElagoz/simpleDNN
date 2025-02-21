@@ -17,7 +17,7 @@ class NeuralNet{
         Matrix *getActivatedNeuronMatrix(int index) { return this->layers.at(index)->matrixifyActivatedVals(); }
         Matrix *getDerivedNeuronMatrix(int index) { return this->layers.at(index)->matrixifyDrivedVals(); }
         Matrix *getWeightMatrix(int index) { return this->matrixWeights.at(index); }
-
+        void setNeuronVal(int indexLayer, int indexNeuron, double val) { this->layers.at(indexLayer)->set_val_layer(indexNeuron, val); }
 
     private:
         int topologySize;

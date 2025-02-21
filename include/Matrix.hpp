@@ -10,8 +10,9 @@ class Matrix{
     public:
         Matrix(int numRows, int numCols, bool isRandom);
         
+        // a pointer to a new Matrix that is the transpose of the current Matrix
         Matrix *transpose();
-        void printToConcole();
+        void printToConsole();
         void set_val_matrix(int r, int c, double val);
         double get_val_matrix(int r, int c);
 
@@ -24,6 +25,7 @@ class Matrix{
         int numRows;
         int numCols;
 
+        // 2D vector to store the Matrix elements
         std::vector<std::vector<double>> elements;
 };
 

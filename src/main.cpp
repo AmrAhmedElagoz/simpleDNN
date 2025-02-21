@@ -5,9 +5,10 @@
 int main(int argc, char **argv){
 
     std::vector<int> topology;
-    topology.push_back(5); 
-    topology.push_back(2); 
-    topology.push_back(5);
+    topology.push_back(6); 
+    topology.push_back(4); 
+    topology.push_back(3); 
+    topology.push_back(2);
 
     std::vector<double> input;
     input.push_back(0.8); 
@@ -17,7 +18,7 @@ int main(int argc, char **argv){
 
     NeuralNet *nn= new NeuralNet(topology);
     nn->setInputs(input);
-
+    nn->feedForward();
     nn->NNprintToConcole(); 
 
     return 0;

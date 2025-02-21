@@ -34,11 +34,12 @@ void NeuralNet::feedForward(){
         }
 
         Matrix *b= this->getWeightMatrix(i);
-        Matrix *c= (new utils::MatrixMultiply(a, b))->execut();
+        Matrix *c= (new utils::MatMul(a, b))->execut();
 
-        std::vector<double> vals;
+        // std::vector<double> vals;
         for(int c_index= 0; c_index < c->getNumCols(); c_index++){
-            vals.push_back(c->get_val_matrix(0, c_index));
+            // vals.push_back(c->get_val_matrix(0, c_index));
+            this->setNeuronVal(i + 1, c_index, c->get_val_matrix(0, c_index));
         }
     }
 }
@@ -57,11 +58,11 @@ void NeuralNet::NNprintToConcole(){
         std::cout << "Layer: " << i << '\n';
         if (i == 0){
             Matrix *m= this->layers.at(i)->matrixifyVals();
-            m->printToConcole();
+            m->printToConsole();
         }
         else {
             Matrix *m= this->layers.at(i)->matrixifyActivatedVals();
-            m->printToConcole();
+            m->printToConsole();
         }
     }
 }

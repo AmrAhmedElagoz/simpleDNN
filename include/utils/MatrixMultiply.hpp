@@ -5,24 +5,24 @@
 #include <assert.h>
 #include "../Matrix.hpp"
 
+#ifdef __CUDACC__
+#include <cuda_runtime.h>  // CUDA runtime API
+#endif
 namespace utils{
-    class MatrixMultiply
+    class MatMul
     {
+    public:
+        MatMul(Matrix *a, Matrix *b);
+        Matrix *execut();
+    
     private:
         Matrix *a;
         Matrix *b;
         Matrix *c;
-
-    public:
-        MatrixMultiply(Matrix *a, Matrix *b);
-        ~MatrixMultiply();
-
-        Matrix *execut();
     };
-    
+    #ifdef __CUDACC__
+    // CUDA matrix multiplication function declaration
+    void matrixMultiplyCUDA(double *a, double *b, double *c, int aRows, int aCols, int bCols);
+    #endif   
 }
-
-
-
-
 #endif

@@ -1,6 +1,7 @@
 #include "../../include/utils/MatrixMultiply.hpp"
+#include <omp.h>
 
-utils::MatrixMultiply::MatrixMultiply(Matrix *, Matrix *b){
+utils::MatMul::MatMul(Matrix *a, Matrix *b){
     this->a= a;
     this->b= b;
 
@@ -13,7 +14,8 @@ utils::MatrixMultiply::MatrixMultiply(Matrix *, Matrix *b){
 }
 
 /*a brute force ijk algorithm for matrix multiplication*/
-Matrix *utils::MatrixMultiply::execut(){
+Matrix *utils::MatMul::execut(){
+    #pragma omp parallel for
     for(int i= 0; i < a->getNumRows(); i++){
         for(int j= 0; j < b->getNumCols(); j++){
             for(int k= 0; k < b->getNumRows(); k++){
@@ -23,4 +25,5 @@ Matrix *utils::MatrixMultiply::execut(){
             }
         }
     }
+    return this->c;
 }
