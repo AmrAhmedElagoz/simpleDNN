@@ -1,12 +1,10 @@
 cmake_minimum_required(VERSION 3.17 FATAL_ERROR)
-
-# Set the project name and the C++ standard
 project(simpleDNN CXX)
 
-# Option to enable CUDA support
+# enable CUDA support, defaults to ON (doesn't really matter as it sets from buildme.sh)
 option(USE_CUDA "Enable CUDA for GPU acceleration" ON)
 
-# Automatically gather source files
+
 FILE(GLOB_RECURSE SOURCES src/*.cpp)
 
 if(USE_CUDA)
@@ -14,11 +12,11 @@ if(USE_CUDA)
     FILE(GLOB_RECURSE CUDA_SOURCES src/*.cu)
     list(APPEND SOURCES ${CUDA_SOURCES})
     message(STATUS "Building with CUDA support")
+    # adding a compiler definition (it will be a preprocessor that can be used in code with #ifdef)
     add_definitions(-DUSE_CUDA)
     set(CMAKE_CUDA_ARCHITECTURES 86)
 endif()
 
-# Create the executable
 add_executable(${PROJECT_NAME} ${SOURCES})
 
 # Include directories

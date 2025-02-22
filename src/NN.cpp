@@ -34,7 +34,7 @@ void NeuralNet::feedForward(){
         }
 
         Matrix *b= this->getWeightMatrix(i);
-        Matrix *c= (new utils::MatMul(a, b))->execut();
+        Matrix *c= (new utils::MatMul(a, b))->execute();
 
         // std::vector<double> vals;
         for(int c_index= 0; c_index < c->getNumCols(); c_index++){
