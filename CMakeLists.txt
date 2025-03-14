@@ -29,6 +29,7 @@ if(USE_CUDA)
     target_link_libraries(${PROJECT_NAME} ${CUDA_LIBRARIES})
 endif()
 
+
 # Set C++ standard to 20
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 
@@ -37,3 +38,15 @@ if(USE_CUDA)
     set_property(TARGET ${PROJECT_NAME} PROPERTY CUDA_STANDARD 11)
     set_target_properties(${PROJECT_NAME} PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 endif()
+
+if("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+    message(STATUS "Building in Debug mode")
+    add_definitions(-D_DEBUG)
+endif()
+
+# if("${CMAKE_PROJECT_NAME}" STREQUAL "Debug")
+#     # add_compile_definitions(-D_DEBUG)
+#     message(STATUS "Building in Debug...")
+#     target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE _DEBUG)
+#     target_compile_options(add PRIVATE $<$<COMPILE_LANGUAGE:CUDA>: -G>)
+# endif()

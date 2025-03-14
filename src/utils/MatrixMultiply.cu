@@ -1,4 +1,5 @@
 #include "../../include/utils/MatrixMultiply.hpp"
+#include "../../include/utils/cuda_error_check.hpp"
 
 namespace utils {
 
@@ -62,13 +63,13 @@ void MatMul::matrixMultiplyCUDA(double *a, double *b, double *c, int aRows, int 
     double *devA, *devB, *devC;
     
     // Allocate device memory
-    cudaMalloc((void**)&devA, aRows * aCols * sizeof(double));
-    cudaMalloc((void**)&devB, aCols * bCols * sizeof(double));
-    cudaMalloc((void**)&devC, aRows * bCols * sizeof(double));
+    cuda_check(cudaMalloc((void**)&devA, aRows * aCols * sizeof(double)));
+    cuda_check(cudaMalloc((void**)&devB, aCols * bCols * sizeof(double)));
+    cuda_check(cudaMalloc((void**)&devC, aRows * bCols * sizeof(double)));
     
     // Copy data from host to device
-    cudaMemcpy(devA, a, aRows * aCols * sizeof(double), cudaMemcpyHostToDevice);
-    cudaMemcpy(devB, b, aCols * bCols * sizeof(double), cudaMemcpyHostToDevice);
+    cuda_check(cudaMemcpy(devA, a, aRows * aCols * sizeof(double), cudaMemcpyHostToDevice));
+    cuda_check(cudaMemcpy(devB, b, aCols * bCols * sizeof(double), cudaMemcpyHostToDevice));
     
     // Define block and grid dimensions
     dim3 block(16, 16);
@@ -78,7 +79,7 @@ void MatMul::matrixMultiplyCUDA(double *a, double *b, double *c, int aRows, int 
     matMulKernel<<<grid, block>>>(devA, devB, devC, aRows, aCols, bCols);
     
     // Copy result back to host
-    cudaMemcpy(c, devC, aRows * bCols * sizeof(double), cudaMemcpyDeviceToHost);
+    cuda_check(cudaMemcpy(c, devC, aRows * bCols * sizeof(double), cudaMemcpyDeviceToHost));
     
     // Free device memory
     cudaFree(devA);
