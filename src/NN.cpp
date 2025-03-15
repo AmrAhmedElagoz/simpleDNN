@@ -42,6 +42,51 @@ void NeuralNet::feedForward(){
             this->setNeuronVal(i + 1, c_index, c->get_val_matrix(0, c_index));
         }
     }
+
+    if (!target.empty() && loss_fn) {
+        // Get output values from the last layer (output layer)
+        std::vector<Neuron *>  outNeurons= this->layers.at(this->layers.size() - 1)->getNeurons();
+        std::vector<double> output;
+        for (int i = 0; i < target.size(); i++) {
+            output.push_back(outNeurons.at(i)->get_activatedval());
+        }
+
+        // Compute total error using the selected loss function
+        this->error = loss_fn->computeLoss(target, output);
+        
+        // Compute individual errors for each output neuron
+        this->errors = loss_fn->computeGradient(target, output);
+    } else {
+        std::cerr << "Error: No target set or loss function selected!" << std::endl;
+    }
+}
+
+void NeuralNet::setError(std::string& loss){
+    if (this->target.size() == 0){
+        std::cerr << "Target must be greater than 0" << std::endl;
+        assert(false);
+    }
+
+    if (this->target.size() != this->layers.at(this->topologySize - 1)->layerSize()){
+        std::cerr << "The Size of the Target: " << this->target.size() << " is not equal to the Output: "
+        << this->layers.at(this->topologySize - 1)->layerSize() << std::endl;
+        assert(false);
+    }
+
+    
+    if (loss == "mse"){
+        loss_fn= std::make_unique<MSE>();
+    }
+    else if (loss == "mae"){
+        loss_fn= std::make_unique<MAE>();
+    }
+    else if (loss == "ce"){
+        loss_fn= std::make_unique<CrossEntropy>();
+    }
+    else {
+        throw std::invalid_argument("Invalid loss type. Expected 'mse', 'mae', or 'ce'.");
+    }
+
 }
 
 void NeuralNet::setInputs(std::vector<double> input){
@@ -50,6 +95,17 @@ void NeuralNet::setInputs(std::vector<double> input){
     for (int i= 0; i < input.size(); i++){
         this->layers.at(0)->set_val_layer(i, input.at(i));
     }
+}
+
+void NeuralNet::setTarget(std::vector<double> target){
+
+    if (target.size() != topology.back()) {
+        std::cerr << "Target size does not match the output layer size!" << std::endl;
+        return;
+    }
+    // targets are not fed into the network; they are only used for loss comparison.
+    this->target = target;
+
 }
 
 void NeuralNet::NNprintToConcole(){

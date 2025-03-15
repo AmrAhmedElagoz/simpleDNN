@@ -15,7 +15,8 @@ class Layer{
         Matrix *matrixifyVals();
         Matrix *matrixifyActivatedVals();
         Matrix *matrixifyDrivedVals();
-        
+        int layerSize() { return this->neurons.size(); }
+        std::vector<Neuron *> getNeurons() { return this->neurons; }
     private:
         int size;
 

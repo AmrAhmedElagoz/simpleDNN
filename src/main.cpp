@@ -4,20 +4,17 @@
 
 int main(int argc, char **argv){
 
-    std::vector<int> topology;
-    topology.push_back(6); 
-    topology.push_back(4); 
-    topology.push_back(3); 
-    topology.push_back(2);
+    std::vector<int> topology = {6, 4, 4, 6};
 
-    std::vector<double> input;
-    input.push_back(0.8); 
-    input.push_back(1.3); 
-    input.push_back(-12.0);
-    input.push_back(5.02);
+    std::vector<double> input= {2.3, 5.1, -0.8, 1.12, 5.6, 0.7};
+    // std::vector<double> target = {2.3, 5.1, -0.8, 1.12, 5.6, 0.7};
 
     NeuralNet *nn= new NeuralNet(topology);
+    std::string loss= "mse";
     nn->setInputs(input);
+    nn->setTarget(input);
+    
+    nn->setError(loss);
     nn->feedForward();
     nn->NNprintToConcole(); 
 
